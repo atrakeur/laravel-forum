@@ -1,45 +1,50 @@
 <?php namespace Atrakeur\Forum\Repositories;
 
 use \Atrakeur\Forum\Models\ForumMessage;
+use \Atrakeur\Repository\Eloquent\AbstractEloquentRepository;
+use \Atrakeur\Repository\Eloquent\Converters\EloquentToObjectConverter;
 
-class MessagesRepository extends AbstractBaseRepository {
+class MessagesRepository extends AbstractEloquentRepository {
 
-	public function __construct(ForumMessage $model)
+	public function __construct(ForumMessage $model, EloquentToObjectConverter $converter)
 	{
-		$this->model = $model;
+		parent::__construct($model, $converter);
 	}
 
-	public function getById($messageId, array $with = array())
+	public function boot()
+	{
+		//Auto order articles by creation date
+		$this->query = $this->query->orderBy('created_at', 'DESC');
+	}
+
+	public function getById($messageId)
 	{
 		if (!is_numeric($messageId))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $messageId, $with);
+		return $this->byId($messageId)->with($with)->getOne();
 	}
 
-	public function getByTopic($topicId, array $with = array())
+	public function getByTopic($topicId)
 	{
 		if (!is_numeric($topicId))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getManyBy('parent_topic', $topicId, $with);
+		return $this->byField('parent_topic', $topicId)->with($with)->getMany();
 	}
 
-	public function getLastByTopic($topicId, $count = 10, array $with = array())
+	public function getLastByTopic($topicId, $count = 10)
 	{
 		if (!is_numeric($topicId))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		$model = $this->model->where('parent_topic', '=', $topicId);
-		$model = $model->orderBy('created_at', 'DESC')->take($count);
-		$model = $model->with($with);
-		return $this->model->convertToObject($model->get());
+		return $this->byField('parent_topic', $topicId)->with($with)->paginate($count);
 	}
 
 }

@@ -13,7 +13,7 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $this->belongsTo('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}
 
-	public function subcategories()
+	public function subCategories()
 	{
 		return $this->hasMany('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}

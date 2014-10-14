@@ -61,7 +61,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$topic->title           = $title;
 
 			$this->fireEvent('forum.new.topic', array($topic));
-			$topic = $this->topics->create($topic);
+			$topic = $this->topics->save($topic);
 			$this->fireEvent('forum.saved.topic', array($topic));
 
 			$message               = new \stdClass();
@@ -70,7 +70,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$message->data         = $data;
 
 			$this->fireEvent('forum.new.message', array($message));
-			$message = $this->messages->create($message);
+			$message = $this->messages->save($message);
 			$this->fireEvent('forum.saved.message', array($message));
 
 			return \Redirect::to($topic->url)->with('success', 'topic created');

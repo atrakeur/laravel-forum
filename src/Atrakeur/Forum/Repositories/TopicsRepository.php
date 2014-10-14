@@ -1,22 +1,24 @@
 <?php namespace Atrakeur\Forum\Repositories;
 
 use \Atrakeur\Forum\Models\ForumTopic;
+use \Atrakeur\Repository\Eloquent\AbstractEloquentRepository;
+use \Atrakeur\Repository\Eloquent\Converters\EloquentToObjectConverter;
 
-class TopicsRepository extends AbstractBaseRepository {
+class TopicsRepository extends AbstractEloquentRepository {
 
-	public function __construct(ForumTopic $model)
+	public function __construct(ForumTopic $model, EloquentToObjectConverter $converter)
 	{
-		$this->model = $model;
+		parent::__construct($model, $converter);
 	}
 
-	public function getById($ident, array $with = array())
+	public function getById($ident)
 	{
 		if (!is_numeric($ident))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $ident, $with);
+		return $this->byId($ident)->with($with)->getOne();
 	}
 
 }

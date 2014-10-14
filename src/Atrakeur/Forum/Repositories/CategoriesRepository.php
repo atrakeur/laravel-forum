@@ -1,12 +1,15 @@
 <?php namespace Atrakeur\Forum\Repositories;
 
 use \Atrakeur\Forum\Models\ForumCategory;
+use \Atrakeur\Repository\Eloquent\AbstractEloquentRepository;
+use \Atrakeur\Repository\Eloquent\Converters\EloquentToObjectConverter;
+use \Atrakeur\Repository\Eloquent\Converters\EloquentToEloquentConverter;
 
-class CategoriesRepository extends AbstractBaseRepository {
+class CategoriesRepository extends AbstractEloquentRepository {
 
-	public function __construct(ForumCategory $model)
+	public function __construct(ForumCategory $model, EloquentToObjectConverter $converter) 
 	{
-		$this->model = $model;
+		parent::__construct($model, $converter);
 	}
 
 	public function getById($ident, array $with = array())
@@ -16,7 +19,7 @@ class CategoriesRepository extends AbstractBaseRepository {
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $ident, $with);
+		return $this->byId($ident)->with($with)->getOne();
 	}
 
 	public function getByParent($parent, array $with = array())
@@ -31,7 +34,7 @@ class CategoriesRepository extends AbstractBaseRepository {
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getManyBy('parent_category', $parent, $with);
+		return $this->byField('parent_category', $parent)->with($with)->getMany();
 	}
 
 }
