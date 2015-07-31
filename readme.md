@@ -1,6 +1,12 @@
 # Laravel forum package
 
-Note: this package is currently in a very alpha stage. I'm currently working on integrating it inside my own website. The base functionnality should work but I'll complete the features when requested or when I need them.
+**
+Note: This package is now discontinued as I don't have time to improve it anymore.
+However, a nice guy has forked it and improved it on top of my work and is now keeping it alive.
+I suggest you have a look at [this repo](https://github.com/Riari/laravel-forum) for the new, updated version.
+This repo will only stay here for documentation purposes. Please submit your pull requests and issues to Riari's one instead.
+**
+
 
 [![Build Status](https://travis-ci.org/atrakeur/laravel-forum.svg?branch=master)](https://travis-ci.org/atrakeur/laravel-forum)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/?branch=master)
